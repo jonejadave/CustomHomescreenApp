@@ -9,25 +9,33 @@ public class ValorantWatcher
     private ManagementEventWatcher startWatcher = null!;
     private ManagementEventWatcher stopWatcher = null!;
     private readonly string configPath;
-    private readonly string valorantMoviesFolder = @"C:\Riot Games\VALORANT\live\ShooterGame\Content\Movies\Menu";
+    private string valorantMoviesFolder;
 
-    public ValorantWatcher(string configPath)
+    public ValorantWatcher(string configPath, string valorantMoviesFolder)
     {
         this.configPath = configPath;
+        this.valorantMoviesFolder = valorantMoviesFolder;
+    }
+
+    /// <summary>
+    /// Update the Valorant Movies folder path dynamically.
+    /// </summary>
+    public void UpdateValorantMoviesFolder(string newFolder)
+    {
+        valorantMoviesFolder = newFolder;
     }
 
     private string? GetCurrentHomescreenPath()
     {
-        if (!Directory.Exists(valorantMoviesFolder))
+        if (!System.IO.Directory.Exists(valorantMoviesFolder))
             return null;
 
-        var mp4Files = Directory.GetFiles(valorantMoviesFolder, "*.mp4");
+        var mp4Files = System.IO.Directory.GetFiles(valorantMoviesFolder, "*.mp4");
         if (mp4Files.Length == 0)
             return null;
 
         // If multiple mp4s exist, choose the largest
-        return mp4Files.Length == 1 ? mp4Files[0] :
-               mp4Files.OrderByDescending(f => new FileInfo(f).Length).FirstOrDefault();
+        return mp4Files.OrderByDescending(f => new System.IO.FileInfo(f).Length).FirstOrDefault();
     }
 
     public void Start()
@@ -46,14 +54,22 @@ public class ValorantWatcher
                 return;
             }
 
-            if (File.Exists(configPath))
+            if (System.IO.File.Exists(configPath))
             {
-                string savedPath = File.ReadAllText(configPath);
-                if (File.Exists(savedPath))
+                string savedPath = System.IO.File.ReadAllText(configPath);
+                if (System.IO.File.Exists(savedPath))
                 {
-                    File.Copy(savedPath, currentMP4, true);
+                    System.IO.File.Copy(savedPath, currentMP4, true);
                     Console.WriteLine($"[ApplySavedVideo] Applied custom video to: {currentMP4}");
                 }
+                else
+                {
+                    Console.WriteLine("[ApplySavedVideo] Saved file not found: " + savedPath);
+                }
+            }
+            else
+            {
+                Console.WriteLine("[ApplySavedVideo] Config file not found: " + configPath);
             }
         }
         catch (Exception ex)
@@ -91,9 +107,9 @@ public class ValorantWatcher
                 try
                 {
                     string? currentMP4 = GetCurrentHomescreenPath();
-                    if (currentMP4 != null && File.Exists(currentMP4))
+                    if (currentMP4 != null && System.IO.File.Exists(currentMP4))
                     {
-                        File.Delete(currentMP4);
+                        System.IO.File.Delete(currentMP4);
                         Console.WriteLine($"[StopWatcher] Deleted modified file: {currentMP4}");
                     }
                 }

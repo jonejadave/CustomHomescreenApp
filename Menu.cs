@@ -12,9 +12,13 @@ namespace CustomHomescreen
     public partial class Menu : Form
     {
         private readonly ValorantWatcher watcher;
-        private readonly string valorantMP4Path = @"C:\Riot Games\VALORANT\live\ShooterGame\Content\Movies\Menu\11_00_Homescreen.mp4";
+
+        // Single config file paths
         private readonly string configPath = "config.txt";
         private readonly string logPath = "startup.log";
+
+        private readonly string valorantFolderPathConfig = "valorantpath.txt"; // Stores Valorant folder path
+        private string valorantFolderPath = ""; // Loaded folder path
 
         private NotifyIcon trayIcon = new NotifyIcon();
         private ContextMenuStrip trayMenu = new ContextMenuStrip();
@@ -44,12 +48,11 @@ namespace CustomHomescreen
 
                 // Load icon from app directory
                 string exeDir = Application.StartupPath;
-                string iconPath = Path.Combine(exeDir, "icon.ico");
+                string iconPath = System.IO.Path.Combine(exeDir, "icon.ico");
                 if (!System.IO.File.Exists(iconPath))
                     throw new FileNotFoundException("icon.ico not found in application directory", iconPath);
 
                 appIcon = new Icon(iconPath);
-                //this.Icon = appIcon;
 
                 trayMenu = new ContextMenuStrip();
                 trayMenu.Items.Add("Open", null, OnTrayOpen);
@@ -66,6 +69,9 @@ namespace CustomHomescreen
                 this.FormClosing += Form1_FormClosing;
                 this.KeyPreview = true;
                 this.KeyDown += Menu_KeyDown;
+
+                // Load saved Valorant folder path here:
+                LoadValorantFolderPath();
 
                 ApplySavedVideo();
                 CheckIfValorantRunning();
@@ -91,12 +97,10 @@ namespace CustomHomescreen
         private void OnTrayOpen(object? sender, EventArgs e)
         {
             this.Show();
-            
         }
 
         private void OnTrayExit(object? sender, EventArgs e)
         {
-            
             watcher.Stop();
             reallyExit = true;
             this.Close();
@@ -108,10 +112,10 @@ namespace CustomHomescreen
             {
                 e.Cancel = true;
                 this.Hide();
-                
             }
         }
 
+        // Existing button to select the MP4 video file
         private void btnSelect_Click(object sender, EventArgs e)
         {
             using OpenFileDialog ofd = new OpenFileDialog
@@ -137,14 +141,40 @@ namespace CustomHomescreen
             }
         }
 
+        // New button event to select Valorant menu folder
+        private void btnSelectValorantFolder_Click(object sender, EventArgs e)
+        {
+            using (FolderBrowserDialog fbd = new FolderBrowserDialog())
+            {
+                if (!string.IsNullOrEmpty(valorantFolderPath) && Directory.Exists(valorantFolderPath))
+                    fbd.SelectedPath = valorantFolderPath;
+
+                if (fbd.ShowDialog() == DialogResult.OK)
+                {
+                    string expectedMP4 = System.IO.Path.Combine(fbd.SelectedPath, "11_00_Homescreen.mp4");
+                    if (!System.IO.File.Exists(expectedMP4))
+                    {
+                        var result = MessageBox.Show(
+                            "Warning: The selected folder does not contain 11_00_Homescreen.mp4.\nAre you sure this is the correct folder?",
+                            "Folder check", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                        if (result == DialogResult.No)
+                            return;
+                    }
+
+                    SaveValorantFolderPath(fbd.SelectedPath);
+                    MessageBox.Show("Valorant folder saved. It will be used next time.", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Log("Valorant folder path selected: " + fbd.SelectedPath);
+                }
+            }
+        }
+
         private async void Menu_Load(object? sender, EventArgs e)
         {
-            await Task.Delay(250); // wait 250ms to let Windows settle after UAC
+            await System.Threading.Tasks.Task.Delay(250);
             this.Icon = appIcon;
-            // optionally, if you want to show here:
-            // this.Show();
-
         }
+
         private void ApplySavedVideo()
         {
             try
@@ -206,6 +236,62 @@ namespace CustomHomescreen
                 System.IO.File.AppendAllText(logPath, $"{DateTime.Now}: {message}\n");
             }
             catch { }
+        }
+
+        // Load the saved Valorant folder path from file
+        private void LoadValorantFolderPath()
+        {
+            try
+            {
+                if (System.IO.File.Exists(valorantFolderPathConfig))
+                {
+                    valorantFolderPath = System.IO.File.ReadAllText(valorantFolderPathConfig).Trim();
+                    if (!Directory.Exists(valorantFolderPath))
+                    {
+                        Log("Saved Valorant folder path does not exist: " + valorantFolderPath);
+                        valorantFolderPath = "";
+                    }
+                    else
+                    {
+                        Log("Loaded saved Valorant folder path: " + valorantFolderPath);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log("Error loading Valorant folder path: " + ex);
+                valorantFolderPath = "";
+            }
+        }
+
+        // Save Valorant folder path to file
+        private void SaveValorantFolderPath(string path)
+        {
+            try
+            {
+                System.IO.File.WriteAllText(valorantFolderPathConfig, path);
+                valorantFolderPath = path;
+                Log("Saved Valorant folder path: " + path);
+            }
+            catch (Exception ex)
+            {
+                Log("Failed to save Valorant folder path: " + ex);
+                MessageBox.Show("Failed to save Valorant folder path:\n" + ex.Message);
+            }
+        }
+
+        // Returns the full path to the MP4 in the user-selected Valorant folder or fallback
+        public string GetValorantMP4Path()
+        {
+            if (!string.IsNullOrEmpty(valorantFolderPath))
+            {
+                string path = System.IO.Path.Combine(valorantFolderPath, "11_00_Homescreen.mp4");
+                if (System.IO.File.Exists(path))
+                    return path;
+            }
+
+            // fallback hardcoded path
+            return @"C:\Riot Games\VALORANT\live\ShooterGame\Content\Movies\Menu\11_00_Homescreen.mp4";
         }
     }
 }
