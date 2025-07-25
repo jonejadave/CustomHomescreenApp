@@ -13,8 +13,9 @@ Change your Valorant Homescreen!
 ## Usage
 
 1. Download the latest release [here]()
-2. Unzip
-3. Run CustomHomescreen.exe
+2. Unzip to folder
+3. Run CustomHomescreen.exe once and set your desired background, close the application, it will minimize to background
+4. Loads on PC startup and swaps the Homescreen on VALORANT launch
 
 
 
