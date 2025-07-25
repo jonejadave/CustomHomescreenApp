@@ -7,7 +7,7 @@ Change your Valorant Homescreen!
 
 ## Preview
 
-![](https://i.imgur.com/tt0uytK.png)
+<blockquote class="imgur-embed-pub" lang="en" data-id="a/f0wrVih" data-context="false" ><a href="//imgur.com/a/f0wrVih"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 
 ## Features
 
