@@ -5,8 +5,6 @@
 Change your Valorant Homescreen!
 
 
-## Preview
-
 ![Image](https://github.com/user-attachments/assets/e4f87958-2c9c-4946-9bbc-5182154eedab)
 
 ## Features
