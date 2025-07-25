@@ -2,7 +2,7 @@
 
 ## Valorant Custom Menu Changer
 
-Change your Valorant main menu!
+Change your Valorant Homescreen!
 
 ## How to use it
 
