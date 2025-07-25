@@ -1,5 +1,7 @@
 ![](https://i.imgur.com/tt0uytK.png)
 
+## Valorant Custom Menu Changer
+
 Change your Valorant main menu!
 
 ## How to use it
