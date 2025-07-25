@@ -7,7 +7,7 @@ Change your Valorant Homescreen!
 
 ## Preview
 
-![](https://i.imgur.com/JZUIiz3.gif)
+![](https://i.imgur.com/tt0uytK.png)
 
 ## Features
 
