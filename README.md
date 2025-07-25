@@ -1,6 +1,6 @@
 ![](https://i.imgur.com/tt0uytK.png)
 
-## Valorant Custom Menu Changer
+# Valorant Custom Menu Changer
 
 Change your Valorant Homescreen!
 
