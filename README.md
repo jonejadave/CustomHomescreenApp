@@ -9,7 +9,9 @@ Change your Valorant Homescreen!
 ## Features
 
 -When launched automatically creates a shortcut to run on startup.
+
 -Saves your preferred Homescreen everytime you launch VALORANT
+
 -Minimizes to tray and runs in the background
 
 ## Usage
