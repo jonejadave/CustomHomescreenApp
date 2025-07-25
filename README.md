@@ -1,8 +1,6 @@
-# Valorant Custom Menu Changer
+![](https://i.imgur.com/tt0uytK.png)
 
 Change your Valorant main menu!
-
-![](https://i.imgur.com/tt0uytK.png)
 
 ## How to use it
 
