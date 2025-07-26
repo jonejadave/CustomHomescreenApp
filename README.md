@@ -22,7 +22,7 @@ Change your Valorant Homescreen!
 
 -Unzip to folder
 
--Run CustomHomescreen.exe as ADMINISTRATOR (otherwise it will not work) once and set your desired background, close the application, it will minimize to background
+-Run Launch and set your desired background, close the application, it will minimize to background
 
 -Loads on PC startup and swaps the Homescreen on VALORANT launch
 
