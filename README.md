@@ -16,7 +16,7 @@ Change your Valorant Homescreen!
 
 ## Usage
 
--Download the latest release [here](https://github.com/lij42/CustomHomescreenApp/releases/latest/customHomescreen1.0.1.zip)
+-Download the latest release [here](https://github.com/lij42/CustomHomescreenApp/releases/latest/download/customHomescreen.zip)
 
 -Sample Wallpapers [here](https://github.com/lij42/CustomHomescreenApp/releases/latest/wallpapers.zip)
 
